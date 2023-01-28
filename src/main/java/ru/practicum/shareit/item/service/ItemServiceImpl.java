@@ -69,7 +69,7 @@ public class ItemServiceImpl implements ItemService {
 
     private Item fillItemFields(Item item, ItemDto itemDto) {
         String itemName = itemDto.getName();
-        String itemDescription = itemDto.getName();
+        String itemDescription = itemDto.getDescription();
         Boolean itemIsAvailable = itemDto.getAvailable();
 
         Optional.ofNullable(itemName).ifPresent(item1 -> item.setName(itemName));
