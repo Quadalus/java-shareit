@@ -1,5 +1,6 @@
 package ru.practicum.shareit.item.dao;
 
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 import ru.practicum.shareit.item.model.Item;
@@ -39,13 +40,13 @@ public class ItemDaoInMemory implements ItemDao {
 
     @Override
     public List<Item> findUserItemsByText(Long userId, String text) {
-        if (text.isBlank()) {
+        if (StringUtils.isBlank(text)) {
             return Collections.emptyList();
         }
 
         return items.values()
                 .stream()
-                .filter(item -> item.getAvailable().equals(Boolean.TRUE)
+                .filter(item -> BooleanUtils.isTrue(item.getAvailable())
                         && (StringUtils.containsAnyIgnoreCase(item.getName(), text)
                         || StringUtils.containsAnyIgnoreCase(item.getDescription(), text)))
                 .collect(Collectors.toList());

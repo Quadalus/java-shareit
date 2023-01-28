@@ -11,6 +11,7 @@ import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.dao.UserDao;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -67,15 +68,13 @@ public class ItemServiceImpl implements ItemService {
     }
 
     private Item fillItemFields(Item item, ItemDto itemDto) {
-        if (itemDto.getName() != null) {
-            item.setName(itemDto.getName());
-        }
-        if (itemDto.getDescription() != null) {
-            item.setDescription(itemDto.getDescription());
-        }
-        if (itemDto.getAvailable() != null) {
-            item.setAvailable(itemDto.getAvailable());
-        }
+        String itemName = itemDto.getName();
+        String itemDescription = itemDto.getName();
+        Boolean itemIsAvailable = itemDto.getAvailable();
+
+        Optional.ofNullable(itemName).ifPresent(item1 -> item.setName(itemName));
+        Optional.ofNullable(itemDescription).ifPresent(item1 -> item.setDescription(itemDescription));
+        Optional.ofNullable(itemIsAvailable).ifPresent(item1 -> item.setAvailable(itemIsAvailable));
         return item;
     }
 

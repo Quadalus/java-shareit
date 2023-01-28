@@ -2,8 +2,10 @@ package ru.practicum.shareit.item.dto;
 
 import ru.practicum.shareit.item.model.Item;
 
+import javax.validation.constraints.NotNull;
+
 public class ItemDtoMapper {
-    public static ItemDto toItemDto(Item item) {
+    public static ItemDto toItemDto(@NotNull Item item) {
         return new ItemDto.ItemDtoBuilder()
                 .id(item.getId())
                 .name(item.getName())
@@ -12,7 +14,7 @@ public class ItemDtoMapper {
                 .build();
     }
 
-    public static Item toItemFromDto(ItemDto itemDto) {
+    public static Item toItemFromDto(@NotNull ItemDto itemDto) {
         return new Item(
                 itemDto.getId(),
                 itemDto.getName(),
