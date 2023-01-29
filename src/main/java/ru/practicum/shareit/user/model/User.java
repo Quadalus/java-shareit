@@ -1,8 +1,8 @@
-package ru.practicum.shareit.item.dto;
+package ru.practicum.shareit.user.model;
 
 import lombok.*;
 
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -10,16 +10,15 @@ import javax.validation.constraints.NotNull;
  */
 @Setter
 @Getter
-@Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class ItemDto {
+@ToString
+@Builder
+public class User {
     private Long id;
-    @NotEmpty
     private String name;
-    @NotEmpty
-    private String description;
     @NotNull
-    private Boolean available;
+    @Email
+    private String email;
 }
