@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.dto.ItemDtoFromRequest;
 import ru.practicum.shareit.item.service.ItemService;
 
 import javax.validation.Valid;
@@ -23,15 +24,15 @@ public class ItemController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ItemDto saveItem(@RequestHeader("X-Sharer-User-Id") Long ownerId,
-                            @Valid @RequestBody ItemDto itemDto) {
-        log.info("the item with id={} has been saved", itemDto.getId());
+                            @Valid @RequestBody ItemDtoFromRequest itemDto) {
+        log.info("the item has been saved");
         return itemService.saveItem(itemDto, ownerId);
     }
 
     @PatchMapping("/{itemId}")
     @ResponseStatus(HttpStatus.OK)
     public ItemDto updateItem(@RequestHeader("X-Sharer-User-Id") Long ownerId,
-                              @RequestBody ItemDto itemDto,
+                              @RequestBody ItemDtoFromRequest itemDto,
                               @PathVariable Long itemId) {
         log.info("the item with id={} has been saved", itemId);
         return itemService.updateItem(itemDto, itemId, ownerId);
