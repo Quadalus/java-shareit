@@ -28,8 +28,8 @@ public class BookingController {
     @PatchMapping("/{bookingId}")
     public BookingDto bookingConfirmation(@RequestHeader("X-Sharer-User-Id") Long userId,
                                    @PathVariable Long bookingId,
-                                   @RequestParam Boolean isApproved) {
-        return bookingService.bookingConfirmation(userId, bookingId, isApproved);
+                                   @RequestParam Boolean approved) {
+        return bookingService.bookingConfirmation(userId, bookingId, approved);
     }
 
     @GetMapping("/{bookingId}")

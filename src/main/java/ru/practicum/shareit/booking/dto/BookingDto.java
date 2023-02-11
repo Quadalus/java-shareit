@@ -16,7 +16,7 @@ public class BookingDto {
     private LocalDateTime end;
     private BookingStatus status;
     private BookingItemDto item;
-    private BookingUserDto user;
+    private BookingUserDto booker;
 
     @Getter
     @Setter

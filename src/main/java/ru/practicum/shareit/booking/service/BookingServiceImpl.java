@@ -178,7 +178,8 @@ public class BookingServiceImpl implements BookingService {
 
         if (!isOwner && !isBooker) {
             throw new BookingNotFoundException(
-                    String.format("Booking with id = %d and with owner or booker ID_%d not found", booking.getId(), userId)
+                    String.format("Booking with id = %d or owner with booker ID_%d not found", booking.getId(),
+                            userId)
             );
         }
     }
@@ -187,7 +188,7 @@ public class BookingServiceImpl implements BookingService {
         try {
             return State.valueOf(state);
         } catch (IllegalArgumentException ex) {
-            throw new IllegalBookingStateException(String.format("unsupported state = %s", state));
+            throw new IllegalBookingStateException(String.format(state));
         }
     }
 
