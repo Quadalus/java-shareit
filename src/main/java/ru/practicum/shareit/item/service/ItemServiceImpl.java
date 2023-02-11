@@ -34,6 +34,7 @@ public class ItemServiceImpl implements ItemService {
     private final CommentRepository commentRepository;
 
     @Override
+    @Transactional
     public ItemDto saveItem(ItemDtoFromRequest itemDto, Long ownerId) {
         User owner = userRepository.findById(ownerId)
                 .orElseThrow(() -> new NotFoundException("user not found"));
@@ -44,6 +45,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    @Transactional
     public ItemDto updateItem(ItemDtoFromRequest itemDto, Long itemId, Long ownerId) {
         checkValidOwner(ownerId);
         Item item = itemRepository.findById(itemId)
@@ -54,6 +56,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    @Transactional
     public void deleteItem(Long itemId) {
         itemRepository.deleteItemById(itemId);
     }
