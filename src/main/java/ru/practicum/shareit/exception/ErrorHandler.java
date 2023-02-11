@@ -6,6 +6,8 @@ import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import ru.practicum.shareit.booking.exception.*;
+import ru.practicum.shareit.item.exception.NoValidUserToCommentException;
 
 @RestControllerAdvice
 @Slf4j
@@ -23,7 +25,7 @@ public class ErrorHandler {
     }
 
     @ExceptionHandler
-    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse incorrectParameterExceptionHandler(final IncorrectParameterException e) {
         return new ErrorResponse("Incorrect parameter error: ", e.getMessage());
     }
@@ -32,5 +34,47 @@ public class ErrorHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse internalErrorExceptionHandler(final InternalError e) {
         return new ErrorResponse("Unexpected error: ", e.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse userNotHaveAccessToCommentExceptionHandler(final NoValidUserToCommentException e) {
+        return new ErrorResponse("NoValidUserToComment error: ", e.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse incorrectBookingTimeExceptionHandler(final IncorrectBookingTimeException e) {
+        return new ErrorResponse("IncorrectBookingTime error: ", e.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse itemNotAvailableExceptionHandler(final ItemNotAvailableException e) {
+        return new ErrorResponse("ItemNotAvailable error: ", e.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorResponse illegalBookingStateExceptionHandler(final IllegalBookingStateException e) {
+        return new ErrorResponse("Unknown state: " + e.getMessage(), "");
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse notFoundExceptionHandler(final BookingNotFoundException e) {
+        return new ErrorResponse("Entity not found error: ", e.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse bookingAlreadyApprovedExceptionHandler(final BookingAlreadyApprovedException e) {
+        return new ErrorResponse("BookingAlreadyApproved error: ", e.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse userAlreadyItemOwnerExceptionHandler(final UserAlreadyItemOwnerException e) {
+        return new ErrorResponse("Entity not found error: ", e.getMessage());
     }
 }

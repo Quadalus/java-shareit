@@ -1,8 +1,10 @@
 package ru.practicum.shareit.item.dto;
 
 import org.springframework.lang.NonNull;
+import ru.practicum.shareit.booking.dto.BookingShortDto;
 import ru.practicum.shareit.item.model.Item;
 
+import java.util.List;
 import java.util.Optional;
 
 public class ItemDtoMapper {
@@ -12,6 +14,29 @@ public class ItemDtoMapper {
                 .name(item.getName())
                 .description(item.getDescription())
                 .available(item.getIsAvailable())
+                .build();
+    }
+
+    public static ItemDetailedDto toItemDetailedDto(@NonNull Item item, @NonNull BookingShortDto last,
+                                                    @NonNull BookingShortDto next, @NonNull List<CommentDto> comments) {
+        return new ItemDetailedDto.ItemDetailedDtoBuilder()
+                .id(item.getId())
+                .name(item.getName())
+                .description(item.getDescription())
+                .available(item.getIsAvailable())
+                .lastBooking(last)
+                .nextBooking(next)
+                .comments(comments)
+                .build();
+    }
+
+    public static ItemDetailedDto toItemDetailedDto(@NonNull Item item, @NonNull List<CommentDto> comments) {
+        return new ItemDetailedDto.ItemDetailedDtoBuilder()
+                .id(item.getId())
+                .name(item.getName())
+                .description(item.getDescription())
+                .available(item.getIsAvailable())
+                .comments(comments)
                 .build();
     }
 

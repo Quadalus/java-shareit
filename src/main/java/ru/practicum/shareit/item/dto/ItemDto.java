@@ -10,7 +10,6 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(of = "id")
 public class ItemDto {
     private Long id;
     private String name;

@@ -22,7 +22,7 @@ public class UserDtoMapper {
         return user;
     }
 
-    public static User toUserFromDto(@NonNull UserDtoFromRequest userDto, User user) {
+    public static User toUserFromDto(@NonNull UserDtoFromRequest userDto, @NonNull User user) {
         Optional.ofNullable(userDto.getEmail()).ifPresent(user::setEmail);
         Optional.ofNullable(userDto.getName()).ifPresent(user::setName);
         return user;
