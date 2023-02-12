@@ -5,45 +5,42 @@ import org.hibernate.Hibernate;
 import ru.practicum.shareit.user.model.User;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
-/**
- * TODO Sprint add-controllers.
- */
-@Setter
 @Getter
-@AllArgsConstructor
+@Setter
 @NoArgsConstructor
-@ToString
+@AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "items")
-public class Item {
+@Table(name = "comments")
+public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "item_id")
+    @Column(name = "comment_id")
     private Long id;
 
-    @Column(nullable = false, length = 75)
-    private String name;
-
-    @Column(nullable = false)
-    private String description;
-
-    @Column(name = "is_available", nullable = false)
-    private Boolean isAvailable;
+    @Column(length = 512, nullable = false)
+    private String text;
 
     @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "owner_id")
-    @ToString.Exclude
-    private User owner;
+    @JoinColumn(name = "item_id")
+    private Item item;
+
+    @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "author_id")
+    private User author;
+
+    @Column(name = "created_time", nullable = false)
+    private LocalDateTime created = LocalDateTime.now();
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        Item item = (Item) o;
-        return id != null && Objects.equals(id, item.id);
+        Comment comment = (Comment) o;
+        return id != null && Objects.equals(id, comment.id);
     }
 
     @Override
