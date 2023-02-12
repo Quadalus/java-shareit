@@ -17,35 +17,35 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BookingController {
     private final BookingService bookingService;
-
+    private static final String USER_HEADER = "X-Sharer-User-Id";
 
     @PostMapping
-    public BookingDto addBooking(@RequestHeader("X-Sharer-User-Id") Long userId,
+    public BookingDto addBooking(@RequestHeader(USER_HEADER) Long userId,
                           @Valid @RequestBody BookingDtoFromRequest bookingDtoFromRequest) {
         return bookingService.addBooking(userId, bookingDtoFromRequest);
     }
 
     @PatchMapping("/{bookingId}")
-    public BookingDto bookingConfirmation(@RequestHeader("X-Sharer-User-Id") Long userId,
+    public BookingDto bookingConfirmation(@RequestHeader(USER_HEADER) Long userId,
                                    @PathVariable Long bookingId,
                                    @RequestParam Boolean approved) {
         return bookingService.bookingConfirmation(userId, bookingId, approved);
     }
 
     @GetMapping("/{bookingId}")
-    public BookingDto getBookingById(@RequestHeader("X-Sharer-User-Id") Long userId,
+    public BookingDto getBookingById(@RequestHeader(USER_HEADER) Long userId,
                               @PathVariable Long bookingId) {
         return bookingService.getBookingById(userId, bookingId);
     }
 
     @GetMapping
-    public List<BookingDto> getBookingsByBooker(@RequestHeader("X-Sharer-User-Id") Long userId,
+    public List<BookingDto> getBookingsByBooker(@RequestHeader(USER_HEADER) Long userId,
                                          @RequestParam(defaultValue = "ALL", required = false) String state) {
         return bookingService.getBookingsByBooker(userId, state);
     }
 
     @GetMapping("/owner")
-    public List<BookingDto> getBookingsByOwner(@RequestHeader("X-Sharer-User-Id") Long userId,
+    public List<BookingDto> getBookingsByOwner(@RequestHeader(USER_HEADER) Long userId,
                                         @RequestParam(defaultValue = "ALL", required = false) String state) {
         return bookingService.getBookingsByOwner(userId, state);
     }

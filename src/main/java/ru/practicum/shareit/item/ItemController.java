@@ -19,10 +19,11 @@ import java.util.List;
 @Slf4j
 public class ItemController {
     private final ItemService itemService;
+    private static final String USER_HEADER = "X-Sharer-User-Id";
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ItemDto saveItem(@RequestHeader("X-Sharer-User-Id") Long ownerId,
+    public ItemDto saveItem(@RequestHeader(USER_HEADER) Long ownerId,
                             @Valid @RequestBody ItemDtoFromRequest itemDto) {
         log.info("the item has been saved");
         return itemService.saveItem(itemDto, ownerId);
@@ -30,7 +31,7 @@ public class ItemController {
 
     @PatchMapping("/{itemId}")
     @ResponseStatus(HttpStatus.OK)
-    public ItemDto updateItem(@RequestHeader("X-Sharer-User-Id") Long ownerId,
+    public ItemDto updateItem(@RequestHeader(USER_HEADER) Long ownerId,
                               @RequestBody ItemDtoFromRequest itemDto,
                               @PathVariable Long itemId) {
         log.info("the item with id={} has been saved", itemId);
@@ -46,7 +47,7 @@ public class ItemController {
 
     @GetMapping("/{itemId}")
     @ResponseStatus(HttpStatus.OK)
-    public ItemDetailedDto findItemById(@RequestHeader("X-Sharer-User-Id") Long userId,
+    public ItemDetailedDto findItemById(@RequestHeader(USER_HEADER) Long userId,
                                         @PathVariable Long itemId) {
         log.info("the item with id={} has been got", itemId);
         return itemService.getItemById(itemId, userId);
@@ -54,14 +55,14 @@ public class ItemController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<ItemDetailedDto> getUserItemsById(@RequestHeader("X-Sharer-User-Id") Long ownerId) {
+    public List<ItemDetailedDto> getUserItemsById(@RequestHeader(USER_HEADER) Long ownerId) {
         log.info("the user item's has been got");
         return itemService.getUserItemsById(ownerId);
     }
 
     @GetMapping("/search")
     @ResponseStatus(HttpStatus.OK)
-    public List<ItemDto> getUserItemByText(@RequestHeader("X-Sharer-User-Id") Long ownerId,
+    public List<ItemDto> getUserItemByText(@RequestHeader(USER_HEADER) Long ownerId,
                                            @RequestParam String text) {
         log.info("the user item's has been got");
         return itemService.getUserItemByText(ownerId, text);
@@ -69,7 +70,7 @@ public class ItemController {
 
     @PostMapping("/{itemId}/comment")
     @ResponseStatus(HttpStatus.OK)
-    public CommentDto addCommentToItem(@RequestHeader("X-Sharer-User-Id") Long ownerId,
+    public CommentDto addCommentToItem(@RequestHeader(USER_HEADER) Long ownerId,
                                        @PathVariable Long itemId,
                                        @RequestBody @Valid CommentDtoFromRequest commentDto) {
         log.info("comment to item with id={} added", itemId);

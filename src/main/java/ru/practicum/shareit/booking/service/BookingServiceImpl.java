@@ -11,7 +11,7 @@ import ru.practicum.shareit.booking.exception.*;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.BookingStatus;
 import ru.practicum.shareit.booking.model.State;
-import ru.practicum.shareit.exception.IncorrectParameterException;
+import ru.practicum.shareit.item.exception.IncorrectParameterException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.dao.ItemRepository;
 import ru.practicum.shareit.item.model.Item;
@@ -119,7 +119,7 @@ public class BookingServiceImpl implements BookingService {
 
     private void checkValidOwnerToItem(Item item, Long ownerId) {
         if (!item.getOwner().getId().equals(ownerId)) {
-            throw new IncorrectParameterException("this owner doesn't have this item");
+            throw new IncorrectParameterException("this user doesn't have this item");
         }
     }
 
