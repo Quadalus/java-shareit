@@ -31,7 +31,7 @@ public class ItemRequest {
     private User requester;
 
     @Column(name = "created_time", nullable = false)
-    private LocalDateTime created;
+    private LocalDateTime created = LocalDateTime.now();
 
     @Override
     public boolean equals(Object o) {
