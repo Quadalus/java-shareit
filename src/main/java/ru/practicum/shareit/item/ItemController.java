@@ -3,11 +3,15 @@ package ru.practicum.shareit.item;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.common.MyPageRequest;
 import ru.practicum.shareit.item.dto.*;
 import ru.practicum.shareit.item.service.ItemService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 /**
@@ -17,6 +21,7 @@ import java.util.List;
 @RequestMapping("/items")
 @RequiredArgsConstructor
 @Slf4j
+@Validated
 public class ItemController {
     private final ItemService itemService;
     private static final String USER_HEADER = "X-Sharer-User-Id";
@@ -55,17 +60,21 @@ public class ItemController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<ItemDetailedDto> getUserItemsById(@RequestHeader(USER_HEADER) Long ownerId) {
+    public List<ItemDetailedDto> getUserItemsById(@RequestParam(required = false, defaultValue = "0") @PositiveOrZero int from,
+                                                  @RequestParam(required = false, defaultValue = "10") @Positive int size,
+                                                  @RequestHeader(USER_HEADER) Long ownerId) {
         log.info("the user item's has been got");
-        return itemService.getUserItemsById(ownerId);
+        return itemService.getUserItemsById(MyPageRequest.of(from, size), ownerId);
     }
 
     @GetMapping("/search")
     @ResponseStatus(HttpStatus.OK)
     public List<ItemDto> getUserItemByText(@RequestHeader(USER_HEADER) Long ownerId,
+                                           @RequestParam(required = false, defaultValue = "0") @PositiveOrZero int from,
+                                           @RequestParam(required = false, defaultValue = "10") @Positive int size,
                                            @RequestParam String text) {
         log.info("the user item's has been got");
-        return itemService.getUserItemByText(ownerId, text);
+        return itemService.getUserItemByText(MyPageRequest.of(from, size), ownerId, text);
     }
 
     @PostMapping("/{itemId}/comment")
