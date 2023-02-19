@@ -197,7 +197,7 @@ class UserControllerTest {
 
     @SneakyThrows
     @Test
-    void deleteUser() {
+    void deleteUserTestWhenDeletedAndThenStatusIsOk() {
         long userId = 1L;
 
         mockMvc.perform(delete("/users/{userId}", userId))
