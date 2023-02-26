@@ -34,15 +34,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 class BookingControllerTest {
     @Autowired
-    MockMvc mockMvc;
+    private MockMvc mockMvc;
 
     @Autowired
-    ObjectMapper objectMapper;
+    private ObjectMapper objectMapper;
 
     @MockBean
-    BookingService bookingService;
+    private BookingService bookingService;
 
-    String userHeader = "X-Sharer-User-Id";
+    private final String userHeader = "X-Sharer-User-Id";
 
     @Test
     @SneakyThrows

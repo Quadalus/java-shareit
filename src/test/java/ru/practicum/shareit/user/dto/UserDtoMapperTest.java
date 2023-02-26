@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class UserDtoMapperTest {
-
     @Test
     void toUserDtoTest() {
         User user = new User();

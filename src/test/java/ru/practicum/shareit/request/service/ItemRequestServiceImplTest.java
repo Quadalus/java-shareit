@@ -26,20 +26,20 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class ItemRequestServiceImplTest {
     @InjectMocks
-    ItemRequestServiceImpl itemRequestService;
+    private ItemRequestServiceImpl itemRequestService;
 
     @Mock
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Mock
-    ItemRepository itemRepository;
+    private ItemRepository itemRepository;
 
     @Mock
-    ItemRequestRepository itemRequestRepository;
+    private ItemRequestRepository itemRequestRepository;
 
-    Long userId = 1L;
-    User user = new User(userId, "name", "e@email.com");
-    Long itemRequestId = 1L;
+    private final Long userId = 1L;
+    private User user = new User(userId, "name", "e@email.com");
+    private final Long itemRequestId = 1L;
 
     @Test
     void addRequestWhenPositiveCaseAndThenSaveRequestAndReturnedItemRequestDto() {
@@ -67,8 +67,10 @@ class ItemRequestServiceImplTest {
 
         when(userRepository.findById(userId)).thenReturn(Optional.empty());
         ItemRequest itemRequest = ItemRequestDtoMapper.toItemRequest(itemRequestDtoFromRequest, user);
+        NotFoundException notFoundException = assertThrows(NotFoundException.class,
+                () -> itemRequestService.addRequest(itemRequestDtoFromRequest, userId));
 
-        assertThrows(NotFoundException.class, () -> itemRequestService.addRequest(itemRequestDtoFromRequest, userId));
+        assertEquals(NotFoundException.class, notFoundException.getClass());
         verify(userRepository, times(1)).findById(userId);
         verify(itemRequestRepository, times(0)).save(itemRequest);
     }
@@ -91,7 +93,10 @@ class ItemRequestServiceImplTest {
     @Test
     void getUserRequestWhenUserNotExistsAndThenThrowNotFoundException() {
         when(userRepository.findById(userId)).thenReturn(Optional.empty());
-        assertThrows(NotFoundException.class, () -> itemRequestService.getUserRequest(userId));
+        NotFoundException notFoundException = assertThrows(NotFoundException.class,
+                () -> itemRequestService.getUserRequest(userId));
+
+        assertEquals(NotFoundException.class, notFoundException.getClass());
         verify(userRepository, times(1)).findById(userId);
         verify(itemRequestRepository, times(0)).findAllByRequesterId(userId);
     }
@@ -115,7 +120,10 @@ class ItemRequestServiceImplTest {
     @Test
     void getRequestByIdWhenUserNotExistsAndThenThrowNotFoundException() {
         when(userRepository.findById(userId)).thenReturn(Optional.empty());
-        assertThrows(NotFoundException.class, () -> itemRequestService.getRequestById(itemRequestId, userId));
+        NotFoundException notFoundException = assertThrows(NotFoundException.class,
+                () -> itemRequestService.getRequestById(itemRequestId, userId));
+
+        assertEquals(NotFoundException.class, notFoundException.getClass());
         verify(userRepository, times(1)).findById(userId);
         verify(itemRequestRepository, times(0)).findById(itemRequestId);
     }
@@ -126,7 +134,10 @@ class ItemRequestServiceImplTest {
         user = userRepository.findById(userId).get();
 
         when(itemRequestRepository.findById(itemRequestId)).thenReturn(Optional.empty());
-        assertThrows(ItemRequestNotFoundException.class, () -> itemRequestService.getRequestById(itemRequestId, userId));
+        ItemRequestNotFoundException itemRequestNotFoundException = assertThrows(ItemRequestNotFoundException.class,
+                () -> itemRequestService.getRequestById(itemRequestId, userId));
+
+        assertEquals(ItemRequestNotFoundException.class, itemRequestNotFoundException.getClass());
         verify(userRepository, times(2)).findById(userId);
         verify(itemRequestRepository, times(1)).findById(itemRequestId);
     }

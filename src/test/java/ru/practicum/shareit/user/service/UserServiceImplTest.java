@@ -25,10 +25,10 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class UserServiceImplTest {
     @InjectMocks
-    UserServiceImpl userService;
+    private UserServiceImpl userService;
 
     @Mock
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Test
     void getAllUsersTestWhenInvokedAndThanReturnListOfUser() {
@@ -66,8 +66,10 @@ class UserServiceImplTest {
         long userId = 1L;
         when(userRepository.findById(userId))
                 .thenReturn(Optional.empty());
+        NotFoundException notFoundException = assertThrows(NotFoundException.class,
+                () -> userService.getUserById(userId));
 
-        assertThrows(NotFoundException.class, () -> userService.getUserById(userId));
+        assertEquals(NotFoundException.class, notFoundException.getClass());
         verify(userRepository, times(1)).findById(userId);
     }
 
@@ -119,11 +121,11 @@ class UserServiceImplTest {
     @Test
     void updateUserWhenUserNotFoundAndThenThrowNotFoundException() {
         long userId = 1L;
-        when(userRepository.findById(userId))
-                .thenReturn(Optional.empty());
+        when(userRepository.findById(userId)).thenReturn(Optional.empty());
+        NotFoundException notFoundException = assertThrows(NotFoundException.class,
+                () -> userService.getUserById(userId));
 
-        assertThrows(NotFoundException.class, () -> userService.getUserById(userId));
-
+        assertEquals(NotFoundException.class, notFoundException.getClass());
         verify(userRepository, times(1)).findById(userId);
         verify(userRepository, never()).save(any(User.class));
     }

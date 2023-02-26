@@ -27,21 +27,21 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(controllers = ItemController.class)
 class ItemControllerTest {
     @MockBean
-    ItemService itemService;
+    private ItemService itemService;
 
     @Autowired
-    MockMvc mockMvc;
+    private MockMvc mockMvc;
 
     @Autowired
-    ObjectMapper objectMapper;
+    private ObjectMapper objectMapper;
 
-    String userHeader = "X-Sharer-User-Id";
-    Long userId = 1L;
-    Long itemId = 1L;
-    Long bookingLastId = 1L;
-    Long bookingNextId = 2L;
-    LocalDateTime start = LocalDateTime.now();
-    LocalDateTime end = LocalDateTime.now().plusDays(5);
+    private final String userHeader = "X-Sharer-User-Id";
+    private final Long userId = 1L;
+    private final Long itemId = 1L;
+    private final Long bookingLastId = 1L;
+    private final Long bookingNextId = 2L;
+    private final LocalDateTime start = LocalDateTime.now();
+    private final LocalDateTime end = LocalDateTime.now().plusDays(5);
 
     @SneakyThrows
     @Test

@@ -12,10 +12,10 @@ import java.time.LocalDateTime;
 import static org.junit.jupiter.api.Assertions.*;
 
 class CommentDtoMapperTest {
-    User user;
-    Item item;
-    Comment comment;
-    LocalDateTime now;
+    private User user;
+    private Item item;
+    private Comment comment;
+    private LocalDateTime now;
 
     @BeforeEach
     public void setUp() {

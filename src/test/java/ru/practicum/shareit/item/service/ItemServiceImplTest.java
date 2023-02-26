@@ -34,37 +34,37 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class ItemServiceImplTest {
     @InjectMocks
-    ItemServiceImpl itemService;
+    private ItemServiceImpl itemService;
 
     @Mock
-    ItemRepository itemRepository;
+    private ItemRepository itemRepository;
 
     @Mock
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Mock
-    BookingRepository bookingRepository;
+    private BookingRepository bookingRepository;
 
     @Mock
-    CommentRepository commentRepository;
+    private CommentRepository commentRepository;
 
     @Mock
-    ItemRequestRepository itemRequestRepository;
+    private ItemRequestRepository itemRequestRepository;
 
-    LocalDateTime start;
-    LocalDateTime end;
-    Long bookingLastId;
-    Long bookingNextId;
-    Long userId;
-    Long itemId;
-    Long itemRequestId;
-    MyPageRequest pageable;
-    User user;
-    ItemRequest request;
-    Item item;
-    Item itemWithRequest;
-    ItemDtoFromRequest itemDtoFromRequest;
-    ItemDtoFromRequest itemDtoFromRequestWithRequest;
+    private LocalDateTime start;
+    private LocalDateTime end;
+    private Long bookingLastId;
+    private Long bookingNextId;
+    private Long userId;
+    private Long itemId;
+    private Long itemRequestId;
+    private MyPageRequest pageable;
+    private User user;
+    private ItemRequest request;
+    private Item item;
+    private Item itemWithRequest;
+    private ItemDtoFromRequest itemDtoFromRequest;
+    private ItemDtoFromRequest itemDtoFromRequestWithRequest;
 
     @BeforeEach
     public void setUp() {
@@ -115,7 +115,10 @@ class ItemServiceImplTest {
     void saveItemWhenUserNotFoundAndThenThrowNotFoundException() {
         when(userRepository.findById(userId)).thenReturn(Optional.empty());
 
-        assertThrows(NotFoundException.class, () -> itemService.saveItem(itemDtoFromRequest, userId));
+        NotFoundException notFoundException = assertThrows(NotFoundException.class,
+                () -> itemService.saveItem(itemDtoFromRequest, userId));
+
+        assertEquals(NotFoundException.class, notFoundException.getClass());
         verify(userRepository, times(1)).findById(userId);
         verify(itemRepository, times(0)).save(item);
     }
@@ -164,8 +167,11 @@ class ItemServiceImplTest {
     @Test
     void updateItemWhenUserNotFoundAndThenThrowNotFoundException() {
         when(userRepository.findById(userId)).thenReturn(Optional.empty());
-        assertThrows(NotFoundException.class, () -> itemService.updateItem(itemDtoFromRequest, itemId, userId));
 
+        NotFoundException notFoundException = assertThrows(NotFoundException.class,
+                () -> itemService.updateItem(itemDtoFromRequest, itemId, userId));
+
+        assertEquals(NotFoundException.class, notFoundException.getClass());
         verify(userRepository, times(1)).findById(userId);
         verify(itemRepository, times(0)).findById(itemId);
         verify(itemRepository, times(0)).save(item);
@@ -175,8 +181,11 @@ class ItemServiceImplTest {
     void updateItemWhenItemNotFoundAndThenThrowNotFoundException() {
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
         when(itemRepository.findById(itemId)).thenReturn(Optional.empty());
-        assertThrows(NotFoundException.class, () -> itemService.updateItem(itemDtoFromRequest, itemId, userId));
 
+        NotFoundException notFoundException = assertThrows(NotFoundException.class,
+                () -> itemService.updateItem(itemDtoFromRequest, itemId, userId));
+
+        assertEquals(NotFoundException.class, notFoundException.getClass());
         verify(userRepository, times(1)).findById(userId);
         verify(itemRepository, times(1)).findById(itemId);
         verify(itemRepository, times(0)).save(item);
@@ -189,8 +198,10 @@ class ItemServiceImplTest {
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
         when(itemRepository.findById(itemId)).thenReturn(Optional.of(itemWithWrongOwner));
 
-        assertThrows(IncorrectParameterException.class, () -> itemService.updateItem(itemDtoFromRequest, itemId, userId));
+        IncorrectParameterException incorrectParameterException = assertThrows(IncorrectParameterException.class,
+                () -> itemService.updateItem(itemDtoFromRequest, itemId, userId));
 
+        assertEquals(IncorrectParameterException.class, incorrectParameterException.getClass());
         verify(userRepository, times(1)).findById(userId);
         verify(itemRepository, times(1)).findById(itemId);
         verify(itemRepository, times(0)).save(item);
@@ -288,8 +299,10 @@ class ItemServiceImplTest {
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
         when(itemRepository.findById(anyLong())).thenReturn(Optional.empty());
 
-        assertThrows(NotFoundException.class, () -> itemService.addCommentToItem(userId, itemId, commentDtoFromRequest));
+        NotFoundException notFoundException = assertThrows(NotFoundException.class,
+                () -> itemService.addCommentToItem(userId, itemId, commentDtoFromRequest));
 
+        assertEquals(NotFoundException.class, notFoundException.getClass());
         verify(bookingRepository, times(1)).existsByBookerIdAndItemIdAndEndIsBefore(anyLong(), anyLong(), any());
         verify(userRepository, times(1)).findById(anyLong());
         verify(itemRepository, times(1)).findById(anyLong());
@@ -303,8 +316,10 @@ class ItemServiceImplTest {
         when(bookingRepository.existsByBookerIdAndItemIdAndEndIsBefore(anyLong(), anyLong(), any())).thenReturn(Boolean.TRUE);
         when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
 
-        assertThrows(NotFoundException.class, () -> itemService.addCommentToItem(userId, itemId, commentDtoFromRequest));
+        NotFoundException notFoundException = assertThrows(NotFoundException.class,
+                () -> itemService.addCommentToItem(userId, itemId, commentDtoFromRequest));
 
+        assertEquals(NotFoundException.class, notFoundException.getClass());
         verify(bookingRepository, times(1)).existsByBookerIdAndItemIdAndEndIsBefore(anyLong(), anyLong(), any());
         verify(userRepository, times(1)).findById(anyLong());
         verify(itemRepository, times(0)).findById(anyLong());
@@ -339,8 +354,10 @@ class ItemServiceImplTest {
         CommentDtoFromRequest commentDtoFromRequest = new CommentDtoFromRequest("text");
 
         when(bookingRepository.existsByBookerIdAndItemIdAndEndIsBefore(anyLong(), anyLong(), any())).thenReturn(Boolean.FALSE);
-        assertThrows(NoValidUserToCommentException.class, () -> itemService.addCommentToItem(userId, itemId, commentDtoFromRequest));
+        NoValidUserToCommentException noValidUserToCommentException = assertThrows(NoValidUserToCommentException.class,
+                () -> itemService.addCommentToItem(userId, itemId, commentDtoFromRequest));
 
+        assertEquals(NoValidUserToCommentException.class, noValidUserToCommentException.getClass());
         verify(bookingRepository, times(1)).existsByBookerIdAndItemIdAndEndIsBefore(anyLong(), anyLong(), any());
         verify(userRepository, times(0)).findById(anyLong());
         verify(itemRepository, times(0)).findById(anyLong());

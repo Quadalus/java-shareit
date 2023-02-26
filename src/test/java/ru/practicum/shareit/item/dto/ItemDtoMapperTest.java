@@ -14,14 +14,14 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ItemDtoMapperTest {
-    User user;
-    Item item;
-    Comment comment;
-    LocalDateTime now;
-    long id = 1L;
+    private User user;
+    private Item item;
+    private Comment comment;
+    private LocalDateTime now;
 
     @BeforeEach
     public void setUp() {
+        long id = 1L;
         user = new User(id, "name", "w@email.com");
         item = new Item(id, "name", "description", Boolean.TRUE, user, null);
         comment = new Comment(id, "text", item, user, now);

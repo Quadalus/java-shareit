@@ -12,11 +12,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class BookingDtoMapperTest {
-
-    User user = new User(1L, "name", "abc@email.com");
-    Item item = new Item(1L, "name", "description", Boolean.TRUE, user, null);
-    LocalDateTime start = LocalDateTime.now();
-    LocalDateTime end = LocalDateTime.now().plusDays(5);
+    private final User user = new User(1L, "name", "abc@email.com");
+    private final Item item = new Item(1L, "name", "description", Boolean.TRUE, user, null);
+    private final LocalDateTime start = LocalDateTime.now();
+    private final LocalDateTime end = LocalDateTime.now().plusDays(5);
 
     @Test
     void toBookingDto() {

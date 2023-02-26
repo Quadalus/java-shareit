@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 import static org.junit.jupiter.api.Assertions.*;
 
 class CommentTest {
-
     @Test
     public void twoCommentMustBeEquals() {
         User user = new User(1L, "name", "e@email.com");

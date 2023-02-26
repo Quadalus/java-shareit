@@ -16,11 +16,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @DataJpaTest
 class CommentRepositoryTest {
     @Autowired
-    CommentRepository commentRepository;
-    LocalDateTime time = LocalDateTime.now();
-    long autoIncrementItemId = 1L;
-    long autoIncrementUserId = 1L;
-    long autoIncrementCommentId = 1L;
+    private CommentRepository commentRepository;
+
+    private final LocalDateTime time = LocalDateTime.now();
+    private long autoIncrementItemId = 1L;
+    private long autoIncrementUserId = 1L;
+    private long autoIncrementCommentId = 1L;
 
     @AfterEach
     public void tearDown() {

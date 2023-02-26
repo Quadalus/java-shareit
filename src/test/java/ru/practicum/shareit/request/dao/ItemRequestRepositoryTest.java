@@ -15,13 +15,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DataJpaTest
 class ItemRequestRepositoryTest {
-
     @Autowired
     ItemRequestRepository itemRequestRepository;
 
-    User requester = new User(1L, "name", "e@email.com");
-    LocalDateTime time = LocalDateTime.now();
-    long autoIncrementId = 1L;
+    private final  User requester = new User(1L, "name", "e@email.com");
+    private final LocalDateTime time = LocalDateTime.now();
+    private long autoIncrementId = 1L;
 
     @AfterEach
     public void tearDown() {

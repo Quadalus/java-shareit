@@ -16,8 +16,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class ItemRepositoryTest {
     @Autowired
     ItemRepository itemRepository;
-    long autoIncrementItemId = 1L;
-    long autoIncrementUserId = 1L;
+
+    private long autoIncrementItemId = 1L;
+    private long autoIncrementUserId = 1L;
 
     @AfterEach
     public void tearDown() {

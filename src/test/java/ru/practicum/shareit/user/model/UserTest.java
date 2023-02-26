@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class UserTest {
-
     @Test
     public void twoUserMustBeEquals() {
         User user = new User(1L, "name", "qwer@email.com");

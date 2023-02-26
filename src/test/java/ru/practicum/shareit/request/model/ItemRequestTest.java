@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ItemRequestTest {
-
     @Test
     public void twoItemRequestsMustBeEquals() {
         User user = new User(1L, "name", "w@email.com");

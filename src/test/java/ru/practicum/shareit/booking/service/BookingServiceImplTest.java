@@ -34,26 +34,26 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class BookingServiceImplTest {
     @InjectMocks
-    BookingServiceImpl bookingService;
+    private BookingServiceImpl bookingService;
 
     @Mock
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Mock
-    BookingRepository bookingRepository;
+    private BookingRepository bookingRepository;
 
     @Mock
-    ItemRepository itemRepository;
+    private ItemRepository itemRepository;
 
-    Long itemId = 1L;
-    Long userId = 1L;
-    Long ownerId = 2L;
-    Long bookingId = 1L;
-    User owner;
-    User user;
-    Item item;
-    LocalDateTime start;
-    LocalDateTime end;
+    private final Long itemId = 1L;
+    private final Long userId = 1L;
+    private final Long ownerId = 2L;
+    private final Long bookingId = 1L;
+    private User owner;
+    private User user;
+    private Item item;
+    private LocalDateTime start;
+    private LocalDateTime end;
 
     @BeforeEach
     public void setUp() {
@@ -121,8 +121,10 @@ class BookingServiceImplTest {
         when(bookingRepository.save(booking)).thenReturn(booking);
 
         bookingRepository.save(booking);
-        assertThrows(NotFoundException.class, () -> bookingService.addBooking(userId, bookingDto));
+        NotFoundException notFoundException = assertThrows(NotFoundException.class,
+                () -> bookingService.addBooking(userId, bookingDto));
 
+        assertEquals(NotFoundException.class, notFoundException.getClass());
         InOrder inOrder = inOrder(itemRepository, userRepository, bookingRepository);
         inOrder.verify(itemRepository, times(1)).findById(itemId);
         inOrder.verify(userRepository, never()).findById(userId);
@@ -140,8 +142,10 @@ class BookingServiceImplTest {
         when(bookingRepository.save(booking)).thenReturn(booking);
 
         bookingRepository.save(booking);
-        assertThrows(NotFoundException.class, () -> bookingService.addBooking(userId, bookingDto));
+        NotFoundException notFoundException = assertThrows(NotFoundException.class,
+                () -> bookingService.addBooking(userId, bookingDto));
 
+        assertEquals(NotFoundException.class, notFoundException.getClass());
         InOrder inOrder = inOrder(itemRepository, userRepository, bookingRepository);
         inOrder.verify(itemRepository, times(1)).findById(itemId);
         inOrder.verify(userRepository, times(1)).findById(userId);
@@ -159,8 +163,10 @@ class BookingServiceImplTest {
         when(bookingRepository.save(booking)).thenReturn(booking);
 
         bookingRepository.save(booking);
-        assertThrows(UserAlreadyItemOwnerException.class, () -> bookingService.addBooking(userId, bookingDto));
+        UserAlreadyItemOwnerException userAlreadyItemOwnerException = assertThrows(UserAlreadyItemOwnerException.class,
+                () -> bookingService.addBooking(userId, bookingDto));
 
+        assertEquals(UserAlreadyItemOwnerException.class, userAlreadyItemOwnerException.getClass());
         InOrder inOrder = inOrder(itemRepository, userRepository, bookingRepository);
         inOrder.verify(itemRepository, times(1)).findById(itemId);
         inOrder.verify(userRepository, times(1)).findById(userId);
@@ -178,8 +184,10 @@ class BookingServiceImplTest {
         when(bookingRepository.save(booking)).thenReturn(booking);
 
         bookingRepository.save(booking);
-        assertThrows(ItemNotAvailableException.class, () -> bookingService.addBooking(userId, bookingDto));
+        ItemNotAvailableException itemNotAvailableException = assertThrows(ItemNotAvailableException.class,
+                () -> bookingService.addBooking(userId, bookingDto));
 
+        assertEquals(ItemNotAvailableException.class, itemNotAvailableException.getClass());
         InOrder inOrder = inOrder(itemRepository, userRepository, bookingRepository);
         inOrder.verify(itemRepository, times(1)).findById(itemId);
         inOrder.verify(userRepository, times(1)).findById(userId);
@@ -197,8 +205,10 @@ class BookingServiceImplTest {
         when(bookingRepository.save(booking)).thenReturn(booking);
 
         bookingRepository.save(booking);
-        assertThrows(IncorrectBookingTimeException.class, () -> bookingService.addBooking(userId, bookingDto));
+        IncorrectBookingTimeException incorrectBookingTimeException = assertThrows(IncorrectBookingTimeException.class,
+                () -> bookingService.addBooking(userId, bookingDto));
 
+        assertEquals(IncorrectBookingTimeException.class, incorrectBookingTimeException.getClass());
         InOrder inOrder = inOrder(itemRepository, userRepository, bookingRepository);
         inOrder.verify(itemRepository, times(1)).findById(itemId);
         inOrder.verify(userRepository, times(1)).findById(userId);
@@ -242,8 +252,10 @@ class BookingServiceImplTest {
         Booking booking = new Booking(bookingId, start, end, item, user, BookingStatus.WAITING);
         when(bookingRepository.findById(bookingId)).thenReturn(Optional.empty());
 
-        assertThrows(BookingNotFoundException.class, () -> bookingService.bookingConfirmation(ownerId, bookingId, Boolean.TRUE));
+        BookingNotFoundException bookingNotFoundException = assertThrows(BookingNotFoundException.class,
+                () -> bookingService.bookingConfirmation(ownerId, bookingId, Boolean.TRUE));
 
+        assertEquals(BookingNotFoundException.class, bookingNotFoundException.getClass());
         verify(bookingRepository, times(1)).findById(bookingId);
         verify(userRepository, never()).findById(ownerId);
         verify(bookingRepository, never()).save(booking);
@@ -255,8 +267,10 @@ class BookingServiceImplTest {
         when(bookingRepository.findById(bookingId)).thenReturn(Optional.of(booking));
         when(userRepository.findById(ownerId)).thenReturn(Optional.empty());
 
-        assertThrows(NotFoundException.class, () -> bookingService.bookingConfirmation(ownerId, bookingId, Boolean.TRUE));
+        NotFoundException notFoundException = assertThrows(NotFoundException.class,
+                () -> bookingService.bookingConfirmation(ownerId, bookingId, Boolean.TRUE));
 
+        assertEquals(NotFoundException.class, notFoundException.getClass());
         verify(bookingRepository, times(1)).findById(bookingId);
         verify(userRepository, times(1)).findById(ownerId);
         verify(bookingRepository, never()).save(booking);
@@ -269,8 +283,10 @@ class BookingServiceImplTest {
         when(bookingRepository.findById(bookingId)).thenReturn(Optional.of(booking));
         when(userRepository.findById(ownerId)).thenReturn(Optional.of(user));
 
-        assertThrows(IncorrectParameterException.class, () -> bookingService.bookingConfirmation(ownerId, bookingId, Boolean.TRUE));
+        IncorrectParameterException incorrectParameterException = assertThrows(IncorrectParameterException.class,
+                () -> bookingService.bookingConfirmation(ownerId, bookingId, Boolean.TRUE));
 
+        assertEquals(IncorrectParameterException.class, incorrectParameterException.getClass());
         verify(bookingRepository, times(1)).findById(bookingId);
         verify(userRepository, times(1)).findById(ownerId);
         verify(bookingRepository, never()).save(booking);
@@ -282,8 +298,10 @@ class BookingServiceImplTest {
         when(bookingRepository.findById(bookingId)).thenReturn(Optional.of(booking));
         when(userRepository.findById(ownerId)).thenReturn(Optional.of(user));
 
-        assertThrows(BookingAlreadyApprovedException.class, () -> bookingService.bookingConfirmation(ownerId, bookingId, Boolean.TRUE));
+        BookingAlreadyApprovedException bookingAlreadyApprovedException = assertThrows(BookingAlreadyApprovedException.class,
+                () -> bookingService.bookingConfirmation(ownerId, bookingId, Boolean.TRUE));
 
+        assertEquals(BookingAlreadyApprovedException.class, bookingAlreadyApprovedException.getClass());
         verify(bookingRepository, times(1)).findById(bookingId);
         verify(userRepository, times(1)).findById(ownerId);
         verify(bookingRepository, never()).save(booking);
@@ -309,8 +327,10 @@ class BookingServiceImplTest {
     void getBookingByIdWhenUserNotFoundAndThenThrowBookingNotFoundException() {
         when(userRepository.findById(ownerId)).thenReturn(Optional.empty());
 
-        assertThrows(NotFoundException.class, () -> bookingService.getBookingById(ownerId, bookingId));
+        NotFoundException notFoundException = assertThrows(NotFoundException.class,
+                () -> bookingService.getBookingById(ownerId, bookingId));
 
+        assertEquals(NotFoundException.class, notFoundException.getClass());
         verify(userRepository, times(1)).findById(ownerId);
         verify(bookingRepository, never()).findById(bookingId);
     }
@@ -320,8 +340,10 @@ class BookingServiceImplTest {
         when(userRepository.findById(ownerId)).thenReturn(Optional.of(user));
         when(bookingRepository.findById(bookingId)).thenReturn(Optional.empty());
 
-        assertThrows(BookingNotFoundException.class, () -> bookingService.getBookingById(ownerId, bookingId));
+        BookingNotFoundException bookingNotFoundException = assertThrows(BookingNotFoundException.class,
+                () -> bookingService.getBookingById(ownerId, bookingId));
 
+        assertEquals(BookingNotFoundException.class, bookingNotFoundException.getClass());
         verify(userRepository, times(1)).findById(ownerId);
         verify(bookingRepository, times(1)).findById(bookingId);
     }
@@ -333,8 +355,10 @@ class BookingServiceImplTest {
         when(userRepository.findById(ownerId)).thenReturn(Optional.of(user));
         when(bookingRepository.findById(bookingId)).thenReturn(Optional.of(booking));
 
-        assertThrows(BookingNotFoundException.class, () -> bookingService.getBookingById(ownerId, bookingId));
+        BookingNotFoundException bookingNotFoundException = assertThrows(BookingNotFoundException.class,
+                () -> bookingService.getBookingById(ownerId, bookingId));
 
+        assertEquals(BookingNotFoundException.class, bookingNotFoundException.getClass());
         verify(userRepository, times(1)).findById(ownerId);
         verify(bookingRepository, times(1)).findById(bookingId);
     }
@@ -432,15 +456,19 @@ class BookingServiceImplTest {
     @Test
     void getBookingsByBookerWhenStateIsWrongAndThenThrowIllegalBookingStateException() {
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
-        assertThrows(IllegalBookingStateException.class,
+        IllegalBookingStateException illegalBookingStateException = assertThrows(IllegalBookingStateException.class,
                 () -> bookingService.getBookingsByBooker(MyPageRequest.of(0, 20), userId, "WRONG"));
+
+        assertEquals(IllegalBookingStateException.class, illegalBookingStateException.getClass());
     }
 
     @Test
     void getBookingsByBookerWhenOwnerIsNotValidAndThenNotFoundException() {
         when(userRepository.findById(userId)).thenReturn(Optional.empty());
-        assertThrows(NotFoundException.class,
+        NotFoundException notFoundException = assertThrows(NotFoundException.class,
                 () -> bookingService.getBookingsByBooker(MyPageRequest.of(0, 20), userId, "ALL"));
+
+        assertEquals(NotFoundException.class, notFoundException.getClass());
     }
 
     @Test
@@ -541,15 +569,18 @@ class BookingServiceImplTest {
     @Test
     void getBookingsByOwnerWhenStateIsWrongAndThenThrowIllegalBookingStateException() {
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
-        assertThrows(IllegalBookingStateException.class,
+        IllegalBookingStateException illegalBookingStateException = assertThrows(IllegalBookingStateException.class,
                 () -> bookingService.getBookingsByOwner(MyPageRequest.of(0, 20), userId, "WRONG"));
+
+        assertEquals(IllegalBookingStateException.class, illegalBookingStateException.getClass());
     }
 
     @Test
     void getBookingsByOwnerWhenOwnerIsNotValidAndThenNotFoundException() {
-
         when(userRepository.findById(userId)).thenReturn(Optional.empty());
-        assertThrows(NotFoundException.class,
+        NotFoundException notFoundException = assertThrows(NotFoundException.class,
                 () -> bookingService.getBookingsByOwner(MyPageRequest.of(0, 20), userId, "ALL"));
+
+        assertEquals(NotFoundException.class, notFoundException.getClass());
     }
 }
