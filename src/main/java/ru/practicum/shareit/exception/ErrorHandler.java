@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.practicum.shareit.booking.exception.*;
 import ru.practicum.shareit.item.exception.IncorrectParameterException;
 import ru.practicum.shareit.item.exception.NoValidUserToCommentException;
+import ru.practicum.shareit.request.exception.ItemRequestNotFoundException;
 
 @RestControllerAdvice
 @Slf4j
@@ -76,6 +77,12 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse userAlreadyItemOwnerExceptionHandler(final UserAlreadyItemOwnerException e) {
+        return new ErrorResponse("Entity not found error: ", e.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse notFoundExceptionHandler(final ItemRequestNotFoundException e) {
         return new ErrorResponse("Entity not found error: ", e.getMessage());
     }
 }

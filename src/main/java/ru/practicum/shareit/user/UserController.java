@@ -3,12 +3,16 @@ package ru.practicum.shareit.user;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.common.MyPageRequest;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.dto.UserDtoFromRequest;
 import ru.practicum.shareit.user.service.UserService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 /**
@@ -18,14 +22,16 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(path = "/users")
+@Validated
 public class UserController {
     private final UserService userService;
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<UserDto> getAllUsers() {
+    public List<UserDto> getAllUsers(@RequestParam(required = false, defaultValue = "0") @PositiveOrZero int from,
+                                     @RequestParam(required = false, defaultValue = "20") @Positive int size) {
         log.info("the list of users has been received");
-        return userService.getAllUsers();
+        return userService.getAllUsers(MyPageRequest.of(from, size));
     }
 
     @GetMapping("/{userId}")

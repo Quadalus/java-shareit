@@ -1,6 +1,7 @@
 package ru.practicum.shareit.user.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.exception.NotFoundException;
@@ -20,8 +21,8 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
-    public List<UserDto> getAllUsers() {
-        return userRepository.findAll()
+    public List<UserDto> getAllUsers(Pageable pageable) {
+        return userRepository.findAll(pageable)
                 .stream()
                 .map(UserDtoMapper::toUserDto)
                 .collect(Collectors.toList());

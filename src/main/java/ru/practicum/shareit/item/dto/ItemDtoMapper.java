@@ -3,17 +3,25 @@ package ru.practicum.shareit.item.dto;
 import org.springframework.lang.NonNull;
 import ru.practicum.shareit.booking.dto.BookingShortDto;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.request.model.ItemRequest;
 
 import java.util.List;
 import java.util.Optional;
 
 public class ItemDtoMapper {
     public static ItemDto toItemDto(@NonNull Item item) {
+        Optional<ItemRequest> itemRequest = Optional.ofNullable(item.getRequest());
+        Long requestId = null;
+
+        if (itemRequest.isPresent()) {
+            requestId = itemRequest.get().getId();
+        }
         return new ItemDto.ItemDtoBuilder()
                 .id(item.getId())
                 .name(item.getName())
                 .description(item.getDescription())
                 .available(item.getIsAvailable())
+                .requestId(requestId)
                 .build();
     }
 

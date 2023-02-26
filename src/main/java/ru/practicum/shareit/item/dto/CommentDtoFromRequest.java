@@ -8,6 +8,7 @@ import javax.validation.constraints.NotEmpty;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
 @Builder
 public class CommentDtoFromRequest {
     @NotEmpty

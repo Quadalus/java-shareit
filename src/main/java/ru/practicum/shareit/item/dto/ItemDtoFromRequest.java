@@ -10,6 +10,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@EqualsAndHashCode
 public class ItemDtoFromRequest {
     @NotEmpty
     private String name;
@@ -17,4 +18,5 @@ public class ItemDtoFromRequest {
     private String description;
     @NotNull
     private Boolean available;
+    private Long requestId;
 }

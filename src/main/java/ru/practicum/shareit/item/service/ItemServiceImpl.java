@@ -2,19 +2,22 @@ package ru.practicum.shareit.item.service;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.dao.BookingRepository;
 import ru.practicum.shareit.booking.dto.BookingDtoMapper;
 import ru.practicum.shareit.booking.dto.BookingShortDto;
-import ru.practicum.shareit.item.exception.IncorrectParameterException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.dao.CommentRepository;
 import ru.practicum.shareit.item.dao.ItemRepository;
 import ru.practicum.shareit.item.dto.*;
+import ru.practicum.shareit.item.exception.IncorrectParameterException;
 import ru.practicum.shareit.item.exception.NoValidUserToCommentException;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.request.dao.ItemRequestRepository;
+import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.dao.UserRepository;
 import ru.practicum.shareit.user.model.User;
 
@@ -32,16 +35,18 @@ public class ItemServiceImpl implements ItemService {
     private final UserRepository userRepository;
     private final BookingRepository bookingRepository;
     private final CommentRepository commentRepository;
+    private final ItemRequestRepository itemRequestRepository;
 
     @Override
     @Transactional
     public ItemDto saveItem(ItemDtoFromRequest itemDto, Long ownerId) {
         User owner = userRepository.findById(ownerId)
-                .orElseThrow(() -> new NotFoundException("user not found"));
+                .orElseThrow(() -> new NotFoundException(String.format("user with id=%d not found", ownerId)));
         Item item = ItemDtoMapper.toItemFromDto(itemDto);
+        setItemRequestIfExists(itemDto, item);
         item.setOwner(owner);
-        Item savedItem = itemRepository.save(item);
-        return ItemDtoMapper.toItemDto(savedItem);
+        itemRepository.save(item);
+        return ItemDtoMapper.toItemDto(item);
     }
 
     @Override
@@ -51,14 +56,15 @@ public class ItemServiceImpl implements ItemService {
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new NotFoundException(String.format("Item with id=%d not found", itemId)));
         checkValidOwnerToItem(item, ownerId);
-        Item updatedItem = itemRepository.save(fillItemFields(item, itemDto));
-        return ItemDtoMapper.toItemDto(updatedItem);
+        Item itemToSave = fillItemFields(item, itemDto);
+        itemRepository.save(itemToSave);
+        return ItemDtoMapper.toItemDto(itemToSave);
     }
 
     @Override
     @Transactional
     public void deleteItem(Long itemId) {
-        itemRepository.deleteItemById(itemId);
+        itemRepository.deleteById(itemId);
     }
 
     @Override
@@ -76,8 +82,8 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<ItemDetailedDto> getUserItemsById(Long ownerId) {
-        List<Item> items = itemRepository.findAllByOwnerId(ownerId);
+    public List<ItemDetailedDto> getUserItemsById(Pageable pageable, Long ownerId) {
+        List<Item> items = itemRepository.findAllByOwnerId(pageable, ownerId);
         return items
                 .stream()
                 .map(this::getItemDetailedDto)
@@ -85,12 +91,12 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<ItemDto> getUserItemByText(Long ownerId, String text) {
+    public List<ItemDto> getUserItemByText(Pageable pageable, Long ownerId, String text) {
         if (StringUtils.isBlank(text)) {
             return Collections.emptyList();
         }
 
-        return itemRepository.findItemsByText(text)
+        return itemRepository.findItemsByText(pageable, text)
                 .stream()
                 .map(ItemDtoMapper::toItemDto)
                 .collect(Collectors.toList());
@@ -101,9 +107,9 @@ public class ItemServiceImpl implements ItemService {
     public CommentDto addCommentToItem(Long ownerId, Long itemId, CommentDtoFromRequest commentDto) {
         checkUserToValidBookingItem(ownerId, itemId);
         User user = userRepository.findById(ownerId)
-                .orElseThrow();
+                .orElseThrow(() -> new NotFoundException(String.format("user with id=%d not found", ownerId)));
         Item item = itemRepository.findById(itemId)
-                .orElseThrow();
+                .orElseThrow(() -> new NotFoundException(String.format("Item with id=%d not found", itemId)));
         Comment comment = commentRepository.save(CommentDtoMapper.toComment(commentDto, item, user));
         return CommentDtoMapper.toCommentDto(comment);
     }
@@ -172,5 +178,12 @@ public class ItemServiceImpl implements ItemService {
     private ItemDetailedDto getItemDetailedDtoWithoutBookings(Item item) {
         List<CommentDto> comments = getItemsComments(item);
         return ItemDtoMapper.toItemDetailedDto(item, comments);
+    }
+
+    private void setItemRequestIfExists(ItemDtoFromRequest itemDtoFromRequest, Item item) {
+        if (itemDtoFromRequest.getRequestId() != null) {
+            ItemRequest itemRequest = itemRequestRepository.getReferenceById(itemDtoFromRequest.getRequestId());
+            item.setRequest(itemRequest);
+        }
     }
 }

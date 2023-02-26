@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(of = "id")
 @Builder
 public class BookingDto {
     private Long id;
@@ -21,6 +22,8 @@ public class BookingDto {
     @Getter
     @Setter
     @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class BookingItemDto {
         private Long id;
         private String name;
@@ -29,6 +32,8 @@ public class BookingDto {
     @Getter
     @Setter
     @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class BookingUserDto {
         private Long id;
     }

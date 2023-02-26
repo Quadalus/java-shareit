@@ -14,7 +14,6 @@ public class UserDtoMapper {
                 .build();
     }
 
-
     public static User toUserFromDto(@NonNull UserDtoFromRequest userDto) {
         User user = new User();
         Optional.ofNullable(userDto.getEmail()).ifPresent(user::setEmail);
