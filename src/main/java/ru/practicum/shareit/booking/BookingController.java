@@ -1,6 +1,7 @@
 package ru.practicum.shareit.booking;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.booking.dto.BookingDto;
@@ -25,11 +26,13 @@ public class BookingController {
     private static final String USER_HEADER = "X-Sharer-User-Id";
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public BookingDto addBooking(@RequestHeader(USER_HEADER) Long userId,
                                  @Valid @RequestBody BookingDtoFromRequest bookingDtoFromRequest) {
         return bookingService.addBooking(userId, bookingDtoFromRequest);
     }
 
+    @ResponseStatus(HttpStatus.OK)
     @PatchMapping("/{bookingId}")
     public BookingDto bookingConfirmation(@RequestHeader(USER_HEADER) Long userId,
                                           @PathVariable Long bookingId,
@@ -37,25 +40,28 @@ public class BookingController {
         return bookingService.bookingConfirmation(userId, bookingId, approved);
     }
 
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{bookingId}")
     public BookingDto getBookingById(@RequestHeader(USER_HEADER) Long userId,
                                      @PathVariable Long bookingId) {
         return bookingService.getBookingById(userId, bookingId);
     }
 
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping
     public List<BookingDto> getBookingsByBooker(@RequestHeader(USER_HEADER) Long userId,
                                                 @RequestParam(defaultValue = "ALL", required = false) String state,
                                                 @RequestParam(required = false, defaultValue = "0") @PositiveOrZero int from,
-                                                @RequestParam(required = false, defaultValue = "10") @Positive int size) {
+                                                @RequestParam(required = false, defaultValue = "20") @Positive int size) {
         return bookingService.getBookingsByBooker(MyPageRequest.of(from, size), userId, state);
     }
 
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/owner")
     public List<BookingDto> getBookingsByOwner(@RequestHeader(USER_HEADER) Long userId,
                                                @RequestParam(defaultValue = "ALL", required = false) String state,
                                                @RequestParam(required = false, defaultValue = "0") @PositiveOrZero int from,
-                                               @RequestParam(required = false, defaultValue = "10") @Positive int size) {
+                                               @RequestParam(required = false, defaultValue = "20") @Positive int size) {
         return bookingService.getBookingsByOwner(MyPageRequest.of(from, size), userId, state);
     }
 }

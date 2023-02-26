@@ -45,8 +45,8 @@ public class ItemServiceImpl implements ItemService {
         Item item = ItemDtoMapper.toItemFromDto(itemDto);
         setItemRequestIfExists(itemDto, item);
         item.setOwner(owner);
-        Item savedItem = itemRepository.save(item);
-        return ItemDtoMapper.toItemDto(savedItem);
+        itemRepository.save(item);
+        return ItemDtoMapper.toItemDto(item);
     }
 
     @Override
@@ -56,14 +56,15 @@ public class ItemServiceImpl implements ItemService {
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new NotFoundException(String.format("Item with id=%d not found", itemId)));
         checkValidOwnerToItem(item, ownerId);
-        Item updatedItem = itemRepository.save(fillItemFields(item, itemDto));
-        return ItemDtoMapper.toItemDto(updatedItem);
+        Item itemToSave = fillItemFields(item, itemDto);
+        itemRepository.save(itemToSave);
+        return ItemDtoMapper.toItemDto(itemToSave);
     }
 
     @Override
     @Transactional
     public void deleteItem(Long itemId) {
-        itemRepository.deleteItemById(itemId);
+        itemRepository.deleteById(itemId);
     }
 
     @Override

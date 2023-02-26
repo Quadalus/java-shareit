@@ -46,8 +46,6 @@ class UserControllerTest {
         String userEmail = userDto1.getEmail();
 
         UserDto userDtoAfterRequest = createUserDto(userId, userName, userEmail);
-
-
         when(userService.saveUser(userDto1))
                 .thenReturn(userDtoAfterRequest);
 
