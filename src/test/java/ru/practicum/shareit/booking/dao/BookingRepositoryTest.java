@@ -13,8 +13,7 @@ import ru.practicum.shareit.user.model.User;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 class BookingRepositoryTest {
@@ -207,9 +206,10 @@ class BookingRepositoryTest {
         Booking booking14 = new Booking(15L, time.minusDays(10), time.minusDays(5), item, booker, BookingStatus.WAITING);
         Booking savedBooking = bookingRepository.save(booking14);
         Long bookerId1 = savedBooking.getBooker().getId();
+
         boolean bookingIsExists = bookingRepository
                 .existsByBookerIdAndItemIdAndEndIsBefore(bookerId1, itemId, time);
 
-        assertEquals(Boolean.FALSE, bookingIsExists);
+        assertFalse(bookingIsExists);
     }
 }
