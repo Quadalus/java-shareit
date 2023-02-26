@@ -1,5 +1,6 @@
 package ru.practicum.shareit.item.dao;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -20,6 +21,11 @@ class CommentRepositoryTest {
     long autoIncrementItemId = 1L;
     long autoIncrementUserId = 1L;
     long autoIncrementCommentId = 1L;
+
+    @AfterEach
+    public void tearDown() {
+        commentRepository.deleteAll();
+    }
 
     @Test
     void findAllByItemIdOrderByCreatedDesc() {

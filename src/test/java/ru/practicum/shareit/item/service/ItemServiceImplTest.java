@@ -8,7 +8,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.practicum.shareit.booking.dao.BookingRepository;
-import ru.practicum.shareit.booking.dto.BookingShortDto;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.BookingStatus;
 import ru.practicum.shareit.common.MyPageRequest;
@@ -346,16 +345,6 @@ class ItemServiceImplTest {
         verify(userRepository, times(0)).findById(anyLong());
         verify(itemRepository, times(0)).findById(anyLong());
         verify(commentRepository, times(0)).save(any());
-    }
-
-    private BookingShortDto createBookingShortDto(Long bookingId) {
-        BookingShortDto bookingShortDto = new BookingShortDto();
-        bookingShortDto.setId(bookingId);
-        bookingShortDto.setBookerId(userId);
-        bookingShortDto.setStart(start);
-        bookingShortDto.setEnd(end);
-
-        return bookingShortDto;
     }
 
     private Booking createBooking(Long bookingId) {

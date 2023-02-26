@@ -200,4 +200,17 @@ class BookingRepositoryTest {
         assertNotNull(bookingFromRepository);
         assertEquals(savedBooking, bookingFromRepository);
     }
+
+    @Test
+    void existsByBookerIdAndItemIdAndEndIsBeforeTest() {
+        Booking booking14 = new Booking(15L, time.minusDays(10), time.minusDays(5), item, booker, BookingStatus.WAITING);
+        Booking savedBooking = bookingRepository.save(booking14);
+        Long bookerId1 = savedBooking.getBooker().getId();
+        Long itemId1 = savedBooking.getItem().getId();
+
+        boolean bookingIsExists = bookingRepository
+                .existsByBookerIdAndItemIdAndEndIsBefore(bookerId1, itemId1, LocalDateTime.now());
+
+        assertTrue(bookingIsExists);
+    }
 }
