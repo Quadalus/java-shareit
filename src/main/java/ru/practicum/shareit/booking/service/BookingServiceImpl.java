@@ -148,12 +148,6 @@ public class BookingServiceImpl implements BookingService {
         }
     }
 
-    private void checkBookingExists(Long bookingId) {
-        if (!bookingRepository.existsById(bookingId)) {
-            throw new BookingNotFoundException(String.format("booking with id = %d not found", bookingId));
-        }
-    }
-
     private void checkUserIsNotOwner(Item item, Long ownerId) {
         Long itemId = item.getId();
         if (item.getOwner().getId().equals(ownerId)) {

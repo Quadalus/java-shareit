@@ -119,13 +119,6 @@ class UserServiceImplTest {
     @Test
     void updateUserWhenUserNotFoundAndThenThrowNotFoundException() {
         long userId = 1L;
-        String name = "name";
-        String email = "e@email.com";
-        User user = new User(userId, name, email);
-        UserDtoFromRequest updatedDto = new UserDtoFromRequest();
-
-        updatedDto.setName(name);
-        updatedDto.setEmail(email);
         when(userRepository.findById(userId))
                 .thenReturn(Optional.empty());
 
