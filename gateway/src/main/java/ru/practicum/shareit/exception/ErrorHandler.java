@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
+import ru.practicum.shareit.booking.validation.IncorrectBookingTimeException;
 
 import javax.validation.ConstraintDeclarationException;
 
@@ -40,9 +41,15 @@ public class ErrorHandler {
     }
 
     @ExceptionHandler
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorResponse illegalBookingStateExceptionHandler(final ConstraintDeclarationException e) {
+        return new ErrorResponse("Unknown state: " + e.getMessage(), "");
+    }
+
+    @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse constraintDeclarationExceptionHandler(final ConstraintDeclarationException e) {
-        return new ErrorResponse("Wrong handler: ", e.getMessage());
+    public ErrorResponse incorrectBookingTimeExceptionHandler(final IncorrectBookingTimeException e) {
+        return new ErrorResponse("IncorrectBookingTime error: ", e.getMessage());
     }
 
     @ExceptionHandler

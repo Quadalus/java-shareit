@@ -6,6 +6,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingDtoFromRequest;
+import ru.practicum.shareit.booking.validation.annotation.StateEnum;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
@@ -48,7 +49,7 @@ public class BookingController {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping
     public List<BookingDto> getBookingsByBooker(@RequestHeader(USER_HEADER) Long userId,
-                                                @RequestParam(defaultValue = "ALL", required = false) String state,
+                                                @RequestParam(defaultValue = "ALL", required = false) @StateEnum String state,
                                                 @RequestParam(required = false, defaultValue = "0") @PositiveOrZero int from,
                                                 @RequestParam(required = false, defaultValue = "20") @Positive int size) {
         return bookingClient.getBookingsByBooker(from, size, userId, state);
@@ -57,7 +58,7 @@ public class BookingController {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/owner")
     public List<BookingDto> getBookingsByOwner(@RequestHeader(USER_HEADER) Long userId,
-                                               @RequestParam(defaultValue = "ALL", required = false) String state,
+                                               @RequestParam(defaultValue = "ALL", required = false) @StateEnum String state,
                                                @RequestParam(required = false, defaultValue = "0") @PositiveOrZero int from,
                                                @RequestParam(required = false, defaultValue = "20") @Positive int size) {
         return bookingClient.getBookingsByOwner(from, size, userId, state);
