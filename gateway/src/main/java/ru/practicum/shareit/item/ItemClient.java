@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import ru.practicum.shareit.item.dto.*;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -63,6 +64,7 @@ public class ItemClient {
                 .header(USER_HEADER, userId.toString())
                 .retrieve()
                 .bodyToFlux(ItemDetailedDto.class)
+                .sort(Comparator.comparingLong(ItemDetailedDto::getId))
                 .collectList()
                 .block();
     }
