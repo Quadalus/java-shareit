@@ -41,7 +41,6 @@ public class BookingServiceImpl implements BookingService {
 
         checkUserIsNotOwner(item, userId);
         checkItemForAvailable(item);
-        checkBookingTime(bookingDto.getStart(), bookingDto.getEnd());
         bookingRepository.save(booking);
         return BookingDtoMapper.toBookingDto(booking);
     }
@@ -140,13 +139,13 @@ public class BookingServiceImpl implements BookingService {
         }
     }
 
-    private void checkBookingTime(LocalDateTime start, LocalDateTime end) {
+    /*private void checkBookingTime(LocalDateTime start, LocalDateTime end) {
         if (start.isAfter(end)) {
             throw new IncorrectBookingTimeException(
                     String.format("end time must be after the start: end %s >---< start %s", end, start)
             );
         }
-    }
+    }*/
 
     private void checkUserIsNotOwner(Item item, Long ownerId) {
         Long itemId = item.getId();

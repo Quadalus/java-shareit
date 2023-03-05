@@ -9,9 +9,6 @@ import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.dto.ItemRequestDtoFromRequest;
 import ru.practicum.shareit.request.service.ItemRequestService;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 /**
@@ -27,7 +24,7 @@ public class ItemRequestController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
-    public ItemRequestDto addRequest(@RequestBody @Valid ItemRequestDtoFromRequest itemRequestDto,
+    public ItemRequestDto addRequest(@RequestBody ItemRequestDtoFromRequest itemRequestDto,
                                      @RequestHeader(USER_HEADER) Long userId) {
         return itemRequestService.addRequest(itemRequestDto, userId);
     }
@@ -40,8 +37,8 @@ public class ItemRequestController {
 
     @GetMapping("/all")
     @ResponseStatus(HttpStatus.OK)
-    public List<ItemRequestDto> getAllItemRequests(@RequestParam(required = false, defaultValue = "0") @PositiveOrZero int from,
-                                                   @RequestParam(required = false, defaultValue = "10") @Positive int size,
+    public List<ItemRequestDto> getAllItemRequests(@RequestParam(required = false, defaultValue = "0") int from,
+                                                   @RequestParam(required = false, defaultValue = "10") int size,
                                                    @RequestHeader(USER_HEADER) Long userId) {
         return itemRequestService.getAllRequests(MyPageRequest.of(from, size), userId);
     }

@@ -9,9 +9,6 @@ import ru.practicum.shareit.booking.dto.BookingDtoFromRequest;
 import ru.practicum.shareit.booking.service.BookingService;
 import ru.practicum.shareit.common.MyPageRequest;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 /**
@@ -28,7 +25,7 @@ public class BookingController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public BookingDto addBooking(@RequestHeader(USER_HEADER) Long userId,
-                                 @Valid @RequestBody BookingDtoFromRequest bookingDtoFromRequest) {
+                                 @RequestBody BookingDtoFromRequest bookingDtoFromRequest) {
         return bookingService.addBooking(userId, bookingDtoFromRequest);
     }
 
@@ -51,8 +48,8 @@ public class BookingController {
     @GetMapping
     public List<BookingDto> getBookingsByBooker(@RequestHeader(USER_HEADER) Long userId,
                                                 @RequestParam(defaultValue = "ALL", required = false) String state,
-                                                @RequestParam(required = false, defaultValue = "0") @PositiveOrZero int from,
-                                                @RequestParam(required = false, defaultValue = "20") @Positive int size) {
+                                                @RequestParam(required = false, defaultValue = "0") int from,
+                                                @RequestParam(required = false, defaultValue = "20") int size) {
         return bookingService.getBookingsByBooker(MyPageRequest.of(from, size), userId, state);
     }
 
@@ -60,8 +57,8 @@ public class BookingController {
     @GetMapping("/owner")
     public List<BookingDto> getBookingsByOwner(@RequestHeader(USER_HEADER) Long userId,
                                                @RequestParam(defaultValue = "ALL", required = false) String state,
-                                               @RequestParam(required = false, defaultValue = "0") @PositiveOrZero int from,
-                                               @RequestParam(required = false, defaultValue = "20") @Positive int size) {
+                                               @RequestParam(required = false, defaultValue = "0") int from,
+                                               @RequestParam(required = false, defaultValue = "20") int size) {
         return bookingService.getBookingsByOwner(MyPageRequest.of(from, size), userId, state);
     }
 }

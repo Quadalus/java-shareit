@@ -10,9 +10,6 @@ import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.dto.UserDtoFromRequest;
 import ru.practicum.shareit.user.service.UserService;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 /**
@@ -28,8 +25,8 @@ public class UserController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<UserDto> getAllUsers(@RequestParam(required = false, defaultValue = "0") @PositiveOrZero int from,
-                                     @RequestParam(required = false, defaultValue = "20") @Positive int size) {
+    public List<UserDto> getAllUsers(@RequestParam(required = false, defaultValue = "0") int from,
+                                     @RequestParam(required = false, defaultValue = "20") int size) {
         log.info("the list of users has been received");
         return userService.getAllUsers(MyPageRequest.of(from, size));
     }
@@ -48,13 +45,13 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public UserDto saveUser(@Valid @RequestBody UserDtoFromRequest userDto) {
-       return userService.saveUser(userDto);
+    public UserDto saveUser(@RequestBody UserDtoFromRequest userDto) {
+        return userService.saveUser(userDto);
     }
 
     @PatchMapping("/{userId}")
     @ResponseStatus(HttpStatus.OK)
-    public UserDto updateUser(@Valid @PathVariable Long userId,
+    public UserDto updateUser(@PathVariable Long userId,
                               @RequestBody UserDtoFromRequest userDto) {
         return userService.updateUser(userDto, userId);
     }

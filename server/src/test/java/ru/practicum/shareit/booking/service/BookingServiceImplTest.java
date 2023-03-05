@@ -195,27 +195,6 @@ class BookingServiceImplTest {
     }
 
     @Test
-    void addBookingWhenStartTimeAfterEndTimeAndThenThrowIncorrectBookingTimeException() {
-        start = LocalDateTime.MAX;
-        BookingDtoFromRequest bookingDto = new BookingDtoFromRequest(item.getId(), start, end);
-        when(itemRepository.findById(itemId)).thenReturn(Optional.of(item));
-        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
-
-        Booking booking = BookingDtoMapper.fromBookingDto(bookingDto, user, item);
-        when(bookingRepository.save(booking)).thenReturn(booking);
-
-        bookingRepository.save(booking);
-        IncorrectBookingTimeException incorrectBookingTimeException = assertThrows(IncorrectBookingTimeException.class,
-                () -> bookingService.addBooking(userId, bookingDto));
-
-        assertEquals(IncorrectBookingTimeException.class, incorrectBookingTimeException.getClass());
-        InOrder inOrder = inOrder(itemRepository, userRepository, bookingRepository);
-        inOrder.verify(itemRepository, times(1)).findById(itemId);
-        inOrder.verify(userRepository, times(1)).findById(userId);
-        inOrder.verify(bookingRepository, never()).save(booking);
-    }
-
-    @Test
     void bookingConfirmationWhenPositiveCaseAndThenBookingStatusIsApprovedAndReturnedBookingDto() {
         Booking booking = new Booking(bookingId, start, end, item, user, BookingStatus.WAITING);
         when(bookingRepository.findById(bookingId)).thenReturn(Optional.of(booking));

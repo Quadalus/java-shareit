@@ -67,52 +67,6 @@ class UserControllerTest {
         verify(userService, times(1)).saveUser(userDto1);
     }
 
-    @Test
-    @SneakyThrows
-    void saveUserWhenAddAndThenStatusIsBadRequestAndUserNameIsWrong() {
-        UserDtoFromRequest userDto1 = new UserDtoFromRequest("", "e1@email.com");
-        long userId = 1L;
-        String userName = userDto1.getName();
-        String userEmail = userDto1.getEmail();
-
-        UserDto userDtoAfterRequest = createUserDto(userId, userName, userEmail);
-
-        when(userService.saveUser(userDto1))
-                .thenReturn(userDtoAfterRequest);
-
-        mockMvc.perform(post("/users")
-                        .content(objectMapper.writeValueAsString(userDto1))
-                        .characterEncoding(StandardCharsets.UTF_8)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
-
-        verify(userService, never()).saveUser(userDto1);
-    }
-
-    @Test
-    @SneakyThrows
-    void saveUserWhenAddAndThenStatusIsBadRequestAndUserEmailIsWrong() {
-        UserDtoFromRequest userDto1 = new UserDtoFromRequest("name", "e1email.com");
-        long userId = 1L;
-        String userName = userDto1.getName();
-        String userEmail = userDto1.getEmail();
-
-        UserDto userDtoAfterRequest = createUserDto(userId, userName, userEmail);
-
-        when(userService.saveUser(userDto1))
-                .thenReturn(userDtoAfterRequest);
-
-        mockMvc.perform(post("/users")
-                        .content(objectMapper.writeValueAsString(userDto1))
-                        .characterEncoding(StandardCharsets.UTF_8)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
-
-        verify(userService, never()).saveUser(userDto1);
-    }
-
     @SneakyThrows
     @Test
     void updateUserWhenUpdatedAndThenStatusIsOkAndUpdatedUserReturned() {

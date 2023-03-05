@@ -4,7 +4,6 @@ import lombok.*;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
 import java.util.Objects;
 
 /**
@@ -27,7 +26,6 @@ public class User {
     @Column(length = 75, nullable = false)
     private String name;
 
-    @Email
     @Column(length = 50, nullable = false, unique = true)
     private String email;
 

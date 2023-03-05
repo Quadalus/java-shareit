@@ -9,9 +9,6 @@ import ru.practicum.shareit.common.MyPageRequest;
 import ru.practicum.shareit.item.dto.*;
 import ru.practicum.shareit.item.service.ItemService;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 /**
@@ -29,7 +26,7 @@ public class ItemController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ItemDto saveItem(@RequestHeader(USER_HEADER) Long ownerId,
-                            @Valid @RequestBody ItemDtoFromRequest itemDto) {
+                            @RequestBody ItemDtoFromRequest itemDto) {
         log.info("the item has been saved");
         return itemService.saveItem(itemDto, ownerId);
     }
@@ -60,8 +57,8 @@ public class ItemController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<ItemDetailedDto> getUserItemsById(@RequestParam(required = false, defaultValue = "0") @PositiveOrZero int from,
-                                                  @RequestParam(required = false, defaultValue = "10") @Positive int size,
+    public List<ItemDetailedDto> getUserItemsById(@RequestParam(required = false, defaultValue = "0") int from,
+                                                  @RequestParam(required = false, defaultValue = "10") int size,
                                                   @RequestHeader(USER_HEADER) Long ownerId) {
         log.info("the user item's has been got");
         return itemService.getUserItemsById(MyPageRequest.of(from, size), ownerId);
@@ -70,8 +67,8 @@ public class ItemController {
     @GetMapping("/search")
     @ResponseStatus(HttpStatus.OK)
     public List<ItemDto> getUserItemByText(@RequestHeader(USER_HEADER) Long ownerId,
-                                           @RequestParam(required = false, defaultValue = "0") @PositiveOrZero int from,
-                                           @RequestParam(required = false, defaultValue = "10") @Positive int size,
+                                           @RequestParam(required = false, defaultValue = "0") int from,
+                                           @RequestParam(required = false, defaultValue = "10") int size,
                                            @RequestParam String text) {
         log.info("the user item's has been got");
         return itemService.getUserItemByText(MyPageRequest.of(from, size), ownerId, text);
@@ -81,7 +78,7 @@ public class ItemController {
     @ResponseStatus(HttpStatus.OK)
     public CommentDto addCommentToItem(@RequestHeader(USER_HEADER) Long ownerId,
                                        @PathVariable Long itemId,
-                                       @RequestBody @Valid CommentDtoFromRequest commentDto) {
+                                       @RequestBody CommentDtoFromRequest commentDto) {
         log.info("comment to item with id={} added", itemId);
         return itemService.addCommentToItem(ownerId, itemId, commentDto);
     }
