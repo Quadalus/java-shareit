@@ -1,7 +1,5 @@
 package ru.practicum.shareit.request.dto;
 
-//import com.sun.istack.NotNull;
-
 import org.springframework.lang.NonNull;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.request.model.ItemRequest;
