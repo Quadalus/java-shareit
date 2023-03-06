@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import ru.practicum.shareit.request.dto.ItemRequestDtoFromRequest;
-import ru.practicum.shareit.request.dto.ItemRequetsDto;
+import ru.practicum.shareit.request.dto.ItemRequestDto;
 
 import java.util.List;
 
@@ -17,27 +17,27 @@ public class ItemRequestClient {
         this.client = WebClient.create(url);
     }
 
-    public ItemRequetsDto getRequestById(Long requestId, Long userId) {
+    public ItemRequestDto getRequestById(Long requestId, Long userId) {
         return client
                 .get()
                 .uri("/requests/{requestId}", requestId)
                 .header(USER_HEADER, userId.toString())
                 .retrieve()
-                .bodyToMono(ItemRequetsDto.class)
+                .bodyToMono(ItemRequestDto.class)
                 .block();
     }
 
-    public List<ItemRequetsDto> getUserRequest(Long userId) {
+    public List<ItemRequestDto> getUserRequest(Long userId) {
         return client.get()
                 .uri("/requests")
                 .header(USER_HEADER, userId.toString())
                 .retrieve()
-                .bodyToFlux(ItemRequetsDto.class)
+                .bodyToFlux(ItemRequestDto.class)
                 .collectList()
                 .block();
     }
 
-    public List<ItemRequetsDto> getAllRequests(Integer from, Integer size, Long userId) {
+    public List<ItemRequestDto> getAllRequests(Integer from, Integer size, Long userId) {
         return client.get()
                 .uri(uriBuilder -> uriBuilder.path("/requests/all")
                         .queryParam("from", from)
@@ -45,18 +45,18 @@ public class ItemRequestClient {
                         .build())
                 .header(USER_HEADER, userId.toString())
                 .retrieve()
-                .bodyToFlux(ItemRequetsDto.class)
+                .bodyToFlux(ItemRequestDto.class)
                 .collectList()
                 .block();
     }
 
-    public ItemRequetsDto addRequest(ItemRequestDtoFromRequest itemRequestDto, Long userId) {
+    public ItemRequestDto addRequest(ItemRequestDtoFromRequest itemRequestDto, Long userId) {
         return client.post()
                 .uri("/requests")
                 .header(USER_HEADER, userId.toString())
                 .bodyValue(itemRequestDto)
                 .retrieve()
-                .bodyToMono(ItemRequetsDto.class)
+                .bodyToMono(ItemRequestDto.class)
                 .block();
     }
 }

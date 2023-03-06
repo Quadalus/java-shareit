@@ -15,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @EqualsAndHashCode
 @Builder
-public class ItemRequetsDto {
+public class ItemRequestDto {
     private Long id;
     private String description;
     private LocalDateTime created;

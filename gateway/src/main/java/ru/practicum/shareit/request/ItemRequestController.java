@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.request.dto.ItemRequestDtoFromRequest;
-import ru.practicum.shareit.request.dto.ItemRequetsDto;
+import ru.practicum.shareit.request.dto.ItemRequestDto;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
@@ -25,29 +25,29 @@ public class ItemRequestController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
-    public ItemRequetsDto addRequest(@RequestBody @Valid ItemRequestDtoFromRequest itemRequestDto,
-                                         @RequestHeader(USER_HEADER) Long userId) {
+    public ItemRequestDto addRequest(@RequestBody @Valid ItemRequestDtoFromRequest itemRequestDto,
+                                     @RequestHeader(USER_HEADER) Long userId) {
         return itemRequestClient.addRequest(itemRequestDto, userId);
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<ItemRequetsDto> getUserItemRequest(@RequestHeader(USER_HEADER) Long userId) {
+    public List<ItemRequestDto> getUserItemRequest(@RequestHeader(USER_HEADER) Long userId) {
         return itemRequestClient.getUserRequest(userId);
     }
 
     @GetMapping("/all")
     @ResponseStatus(HttpStatus.OK)
-    public List<ItemRequetsDto> getAllItemRequests(@RequestParam(required = false, defaultValue = "0") @PositiveOrZero int from,
-                                            @RequestParam(required = false, defaultValue = "10") @Positive int size,
-                                            @RequestHeader(USER_HEADER) Long userId) {
+    public List<ItemRequestDto> getAllItemRequests(@RequestParam(required = false, defaultValue = "0") @PositiveOrZero int from,
+                                                   @RequestParam(required = false, defaultValue = "10") @Positive int size,
+                                                   @RequestHeader(USER_HEADER) Long userId) {
         return itemRequestClient.getAllRequests(from, size, userId);
     }
 
     @GetMapping("/{requestId}")
     @ResponseStatus(HttpStatus.OK)
-    public ItemRequetsDto getItemRequestById(@PathVariable Long requestId,
-                                      @RequestHeader(USER_HEADER) Long userId) {
+    public ItemRequestDto getItemRequestById(@PathVariable Long requestId,
+                                             @RequestHeader(USER_HEADER) Long userId) {
         return itemRequestClient.getRequestById(requestId, userId);
     }
 }
